@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit the main sale order report template -->
+    <template id="report_saleorder_document_inherit" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@class='page']/div[1]" position="after">
+            <div class="row mt32 mb32" t-if="doc.partner_id.sales_limit > 0">
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <strong>Credit Limit Information:</strong><br/>
+                        Customer Sales Limit: <span t-field="doc.partner_id.sales_limit" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                        <br/>
+                        Order Total: <span t-field="doc.amount_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                        <br/>
+                        <t t-set="percentage" t-value="(doc.amount_total / doc.partner_id.sales_limit * 100) if doc.partner_id.sales_limit > 0 else 0"/>
+                        Credit Limit Usage: <span t-esc="'%.0f' % percentage"/>% of available limit
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
